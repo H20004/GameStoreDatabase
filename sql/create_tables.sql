@@ -1,0 +1,33 @@
+PRAGMA foreign_keys = ON;
+
+DROP TABLE IF EXISTS Sales;
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Games;
+
+CREATE TABLE Games (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Title TEXT NOT NULL,
+    Genre TEXT NOT NULL,
+    Price REAL NOT NULL CHECK (Price >= 0),
+    ReleaseYear INTEGER NOT NULL CHECK (ReleaseYear >= 1970),
+    Stock INTEGER NOT NULL CHECK (Stock >= 0)
+);
+
+CREATE TABLE Customers (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    FullName TEXT NOT NULL,
+    Email TEXT NOT NULL UNIQUE,
+    Country TEXT NOT NULL
+);
+
+CREATE TABLE Sales (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    GameId INTEGER NOT NULL,
+    CustomerId INTEGER NOT NULL,
+    SaleDate TEXT NOT NULL,
+    Quantity INTEGER NOT NULL CHECK (Quantity > 0),
+    UnitPrice REAL NOT NULL CHECK (UnitPrice >= 0),
+
+    FOREIGN KEY (GameId) REFERENCES Games(Id),
+    FOREIGN KEY (CustomerId) REFERENCES Customers(Id)
+);
